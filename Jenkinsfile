@@ -10,7 +10,7 @@ node('built-in')
    } 
    stage('ContinuosDeployment')
    {
-       deploy adapters: [tomcat9(credentialsId: 'cd076526-1975-42c2-a9e1-b79f5c0cc500', path: '', url: 'http://172.31.23.179:8080')], contextPath: 'testapp', war: '**/*.war'
+       deploy adapters: [tomcat9(credentialsId: 'cd076526-1975-42c2-a9e1-b79f5c0cc500', path: '', url: 'http://172.31.23.179:9090')], contextPath: 'testapp', war: '**/*.war'
    }
    stage('ContinuosTesting')
    {
@@ -20,8 +20,7 @@ node('built-in')
    } 
    stage('ContinuosDelivery')
    {
-       input message: 'Need approval from the DM!', submitter: 'srinivas'
-      deploy adapters: [tomcat9(credentialsId: 'cd076526-1975-42c2-a9e1-b79f5c0cc500', path: '', url: 'http://172.31.23.149:8080')], contextPath: 'prodapp', war: '**/*.war'
+      deploy adapters: [tomcat9(credentialsId: 'cd076526-1975-42c2-a9e1-b79f5c0cc500', path: '', url: 'http://172.31.23.149:9090')], contextPath: 'prodapp', war: '**/*.war'
    } 
    
    
