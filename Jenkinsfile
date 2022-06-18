@@ -1,35 +1,60 @@
-node('built-in')
+@Library('SampleLibrary')_
+
+pipeline
 {
-   stage('ContinuosDownload')
-   {
-       git 'https://github.com/krishnain/SampleMaven.git'
-   } 
-   stage('ContinuosBuild')
-   {
-       sh 'mvn package'
-   } 
-   stage('ContinuosDeployment')
-   {
-       deploy adapters: [tomcat9(credentialsId: 'cd076526-1975-42c2-a9e1-b79f5c0cc500', path: '', url: 'http://172.31.23.179:9090')], contextPath: 'testapp', war: '**/*.war'
-   }
-   stage('ContinuosTesting')
-   {
-       git 'https://github.com/intelliqittrainings/FunctionalTesting.git'
-       sh 'java -jar /home/ubuntu/.jenkins/workspace/ScriptedPipeline1/testing.jar'
-       
-   } 
-   stage('ContinuosDelivery')
-   {
-      deploy adapters: [tomcat9(credentialsId: 'cd076526-1975-42c2-a9e1-b79f5c0cc500', path: '', url: 'http://172.31.23.149:9090')], contextPath: 'prodapp', war: '**/*.war'
-   } 
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+    agent any
+    stages
+    {
+        stage('ContinuousDownload_Master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newGit("https://github.com/krishnain/SampleMaven.git")
+                }
+            }
+        }
+        stage('ContinuousBuild_Master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newMaven()
+                }
+            }
+        }
+        stage('ContinuousDeployment_Master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newDeploy("Pipelinewithlibraries","172.31.23.179","testapp")
+                }
+            }
+        }
+        stage('ContinuousTesting_Master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newGit("https://github.com/intelliqittrainings/FunctionalTesting.git")
+                    cicd.runSelenium("Pipelinewithlibraries")
+                }
+            }
+        }
+        stage('ContinuousDelivery_Master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newDeploy("Pipelinewithlibraries","172.31.23.149","prodapp")
+                }
+            }
+        }
+    }
 }
