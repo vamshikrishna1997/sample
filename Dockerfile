@@ -1,5 +1,5 @@
-FROM tomee
-COPY webapp/target/webapp.war /usr/local/tomee/webapps
+FROM tomcat
+ADD webapp/target/webapp.war /usr/local/tomcat/webapps/
 EXPOSE 8080
-CMD 'sh /usr/local/tomee/bin/startup.sh'
+CMD ["catalina.sh", "run"]
 
